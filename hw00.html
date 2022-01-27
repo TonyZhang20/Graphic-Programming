@@ -1,0 +1,46 @@
+<!--
+  Solve the following project from projecteuler.com
+  https://projecteuler.net/problem=1
+
+  If we list all the natural numbers below 10 that are multiples of 3 or 5, 
+    we get 3, 5, 6 and 9. The sum of these multiples is 23.
+    Find the sum of all the multiples of 3 or 5 below 1000.
+
+  If you create an an account, you can verify your answer.
+-->
+<html>
+  <body>
+
+    <p id="result-paragraph"></p>
+
+    <script>
+      // todo 1 - Create a function called SumOfAllMultiples3And5 that takes 1 argument
+        function SumOfAllMultiples3And5(x){
+            var sum = 0;
+            for(let i = 0; i < 1000; i++)
+            {
+                if(i % 3 == 0 || i % 5 == 0)
+                {
+                    sum += i;
+                }
+            }
+            return sum;
+        }
+      // todo 2 - Call the function with a value of 1000
+      var result = SumOfAllMultiples3And5(1000);
+      // var result = /*todo*/
+
+      // todo 3  - Get a reference to the paragraph element declared above (<p>)
+      // https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById
+      var resultElement = document.getElementById('result-paragraph');
+      
+      var expectedResult = 233168;
+
+      if (result === expectedResult) {
+        resultElement.innerHTML = "Your function <span style='color:green;'>successfully</span> returned " + expectedResult;
+      } else {
+        resultElement.innerHTML = "Your function <span style='color:red;'>failed</span> to return " + expectedResult;
+      }
+    </script>
+  </body>
+</html>
