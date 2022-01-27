@@ -1,0 +1,74 @@
+<html>
+<script> 
+
+/*
+  Use the provided constructor function (i.e. Account) to construct two computer accounts. 
+  The name of the first is acct1 for user "Bob Smith" with password "abc123". 
+  The name of the second is acct2 for user "Ted Jones" with password "redmenace". 
+  Then invoke the "makeAdmin" function to make Ted an administrator.
+*/
+
+function Account(user,password) {
+  this.user = user;
+  this.password = password;
+  this.priv = "normal";
+  this.makeAdmin = function() {
+    this.priv = "administrator";
+  };
+}
+
+// Add code here
+var acct1 = new Account("Bob Smith", "abc123");
+var acct2 = new Account("Ted Jones", "redmenace");
+acct2.makeAdmin();
+// Code test, do not modify the code below
+
+function testProperty(name,actual,correct) {
+  document.write("property "+name+" is: "+actual+" and should be: "+correct+"<br>");
+  test(actual === correct);
+}
+
+function test(x) {
+  if (x)
+    document.write("pass<br>");
+  else
+    document.write("FAIL<br>");  
+}
+
+document.write("Test Results<br>");
+
+var name = "acct1.user";
+var actual = acct1.user;
+var correct = "Bob Smith";
+testProperty(name,actual,correct);
+
+var name = "acct1.password";
+var actual = acct1.password;
+var correct = "abc123";
+testProperty(name,actual,correct);
+
+var name = "acct1.priv";
+var actual = acct1.priv;
+var correct = "normal";
+testProperty(name,actual,correct);
+
+var name = "acct2.user";
+var actual = acct2.user;
+var correct = "Ted Jones";
+testProperty(name,actual,correct);
+
+var name = "acct2.password";
+var actual = acct2.password;
+var correct = "redmenace";
+testProperty(name,actual,correct);
+
+var name = "acct2.priv";
+var actual = acct2.priv;
+var correct = "administrator";
+testProperty(name,actual,correct);
+
+
+</script>
+</html>  
+
+  
