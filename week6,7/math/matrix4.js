@@ -274,29 +274,37 @@ Matrix4.prototype = {
 		//r is width/height
 		var r = aspect * t;
 
+		var e = this.clone();
 		// shortcut - use in place of this.elements
-		var e = this.elements;
+		//var e = this.elements;
 		
-		this.elements = Float32Array.from([
+		e.elements = Float32Array.from([
 			near / r, 0, 0, 0,
-			0, near/t, 0, 0,
+			0, near / t, 0, 0,
 			0, 0, (far + near)/(far - near) * -1, 2 * far * near / (far - near) * -1,
 			0, 0, -1, 0
 		]);
 		
+		this.multiply(e);
+
 		return this;
 	},
 
 	// -------------------------------------------------------------------------
 	makeOrthographic: function(left, right, top, bottom, near, far) {
 		// shortcut - use in place of this.elements
-		this.elements = Float32Array.from([
+		
+		//scale mutilply tansform
+		var e = this.clone()
+
+		e.elements = Float32Array.from([
 			2 / (right - left), 0, 0, -(right + left)/ (right - left),
 			0, 2/(top - bottom), 0, -(top + bottom)/(top - bottom),
 			0, 0, -2 / (far - near), -(far + near)/(far - near),
 			0, 0, 0, 1
 		]);
 		
+		this.multiply(e)
 		// todo - set every element to the appropriate value
 
 		return this;
@@ -320,11 +328,10 @@ Matrix4.prototype = {
 		// todo - create and combine all necessary matrices necessary to achieve the desired effect
 		var Tmoon = moonMatrix.clone().makeTranslation(offsetFromEarth);
 
-		var Rmoonz = moonMatrix.clone().makeRotationZ(moonRotationAngle);
+		// var Rmoonz = moonMatrix.clone().makeRotationZ(moonRotationAngle);
+		var Rmoonz = moonMatrix.makeRotationZ(moonRotationAngle);
 
 		moonMatrix = earthWorldMatrix.clone().multiply(Rmoonz.multiply(Tmoon));
-
-		
 
 		return moonMatrix;
 	},
