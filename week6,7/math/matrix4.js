@@ -81,41 +81,13 @@ Matrix4.prototype = {
 			console.error("Trying to multiply a 4x4 matrix with an invalid vector value");
 		}
 
-		var result = new Vector4();
-		// todo
-		// set the result vector values to be the result of multiplying the
-		// vector v by 'this' matrix
-
-		//this is matrix4
-		//v1 is vector4
-		// (4*4) * (1*4)
-		//expect (1 * 4)
-		//vector4 x,y,z,w
-		//matrix4 this.elements[]
-		for(var i = 0; i < 16;)
-		{
-			var data = 0;
-			data += this.elements[i++] * v.x;
-			data += this.elements[i++] * v.y;
-			data += this.elements[i++] * v.z;
-			data += this.elements[i++] * v.w;
-			if(i == 4)
-			{
-				result.x = data;
-			}
-			if(i == 8)
-			{
-				result.y = data;
-			}
-			if(i == 12)
-			{
-				result.z = data;
-			}
-			if(i == 16)
-			{
-				result.w = data;
-			}
-		}
+	    var e = this.elements;
+	    var result = new Vector4(
+	      e[0] * v.x + e[1] * v.y + e[2] * v.z + e[3] * v.w,
+	      e[4] * v.x + e[5] * v.y + e[6] * v.z + e[7] * v.w,
+	      e[8] * v.x + e[9] * v.y + e[10] * v.z + e[11] * v.w,
+	      e[12] * v.x + e[13] * v.y + e[14] * v.z + e[15] * v.w
+	    );
 		return result;
 	},
 
@@ -175,7 +147,7 @@ Matrix4.prototype = {
 		var cos = Math.cos(radians);
 		var sin = Math.sin(radians);
 
-		var e = this.clone();
+		var e = this;
 
 		e.elements = Float32Array.from([
 			1,0,0,0,
@@ -183,8 +155,6 @@ Matrix4.prototype = {
 			0,sin,cos,0,
 			0,0,0,1
 		]);
-
-		this.multiply(e)
 
 		return this;
 	},
@@ -201,14 +171,13 @@ Matrix4.prototype = {
 		// todo - set every element of this matrix to be a rotation around the y-axis
 
 
-		var e = this.clone();
+		var e = this;
 		e.elements = Float32Array.from([
 			cos,0,sin,0,
 			0,1,0,0,
 			-sin,0,cos,0,
 			0,0,0,1
 		]);
-		this.multiply(e)
 		return this;
 	},
 
@@ -220,14 +189,13 @@ Matrix4.prototype = {
 		var sin = Math.sin(radians);
 		// shortcut - use in place of this.elements
 
-		var e = this.clone();
+		var e = this;
 		e.elements = Float32Array.from([
 			cos,-sin,0,0,
 			sin,cos,0,0,
 			0,0,1,0,
 			0,0,0,1
 		]);
-		this.multiply(e)
 
 		// todo - set every 	element of this matrix to be a rotation around the z-axis
 		return this;
@@ -269,12 +237,12 @@ Matrix4.prototype = {
 		//tan0 = t / n
 		// t = tan0 * n
 
-		var t = (Math.tan(fovyRads) * near).toFixed(2);
+		var t = (Math.tan(fovyRads) * near);
 		//t is height
 		//r is width/height
 		var r = aspect * t;
 
-		var e = this.clone();
+		var e = this;
 		// shortcut - use in place of this.elements
 		//var e = this.elements;
 		
@@ -285,8 +253,6 @@ Matrix4.prototype = {
 			0, 0, -1, 0
 		]);
 		
-		this.multiply(e);
-
 		return this;
 	},
 
@@ -295,7 +261,7 @@ Matrix4.prototype = {
 		// shortcut - use in place of this.elements
 		
 		//scale mutilply tansform
-		var e = this.clone()
+		var e = this
 
 		e.elements = Float32Array.from([
 			2 / (right - left), 0, 0, -(right + left)/ (right - left),
@@ -303,9 +269,6 @@ Matrix4.prototype = {
 			0, 0, -2 / (far - near), -(far + near)/(far - near),
 			0, 0, 0, 1
 		]);
-		
-		this.multiply(e)
-		// todo - set every element to the appropriate value
 
 		return this;
 	},
@@ -329,7 +292,7 @@ Matrix4.prototype = {
 		var Tmoon = moonMatrix.clone().makeTranslation(offsetFromEarth);
 
 		// var Rmoonz = moonMatrix.clone().makeRotationZ(moonRotationAngle);
-		var Rmoonz = moonMatrix.makeRotationZ(moonRotationAngle);
+		var Rmoonz = moonMatrix.clone().makeRotationZ(moonRotationAngle);
 
 		moonMatrix = earthWorldMatrix.clone().multiply(Rmoonz.multiply(Tmoon));
 
