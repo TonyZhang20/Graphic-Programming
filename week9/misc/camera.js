@@ -5,6 +5,9 @@ function Camera(input) {
     this.cameraPosition = new Vector3();
     this.cameraWorldMatrix = new Matrix4();
 
+    this.eye = new Vector3(0,0,1);
+
+
     // -------------------------------------------------------------------------
     this.getViewMatrix = function() {
         return this.cameraWorldMatrix.clone().inverse();
@@ -14,9 +17,14 @@ function Camera(input) {
     this.getForward = function() {
         // todo #6 - pull out the forward direction from the world matrix and return as a vector
         //         - recall that the camera looks in the "backwards" direction
+
         var Inverse = this.getViewMatrix();
-        var vector3 = new Vector3(Inverse.elements[2],Inverse.elements[6],-Inverse.elements[10]).normalize();
-        return vector3;
+        this.LocalForward = new Vector3(Inverse.elements[2],Inverse.elements[6],-Inverse.elements[10]).normalize();
+
+        var Result = new Vector3(this.cameraWorldMatrix.elements[3], this.cameraWorldMatrix.elements[7], this.cameraWorldMatrix.elements[11]);
+        var SecondR = new Vector3(this.cameraWorldMatrix.elements[3], this.cameraWorldMatrix.elements[7], this.cameraWorldMatrix.elements[11] -1);
+        this.WorldForward = SecondR.subtract(Result)
+        return this.WorldForward;
     }
     // -------------------------------------------------------------------------
     this.update = function(dt) {
@@ -49,6 +57,12 @@ function Camera(input) {
 
         // todo #8 - create a rotation matrix based on cameraYaw and apply it to the cameraWorldMatrix
         var RotationY = new Matrix4().makeRotationY(this.cameraYaw);
+
+        // var tempEyePosition = new Vector3(this.eye.x, this.eye.y, this.eye.clone().z - Math.tan(this.cameraYaw * Math.PI / 180) * currentForward.length()); 
+        // this.secondVector = tempEyePosition.clone().subtract(this.eye.clone())
+        // this.eye.add(this.secondVector)
+        // console.log(this.secondVector)
+
         this.cameraWorldMatrix.multiply(RotationY);
         // (order matters!)
     }
