@@ -1,5 +1,11 @@
 'use strict'
 
+		/*
+		Name - Xinyuan Zhang
+		Partner - Miguel Tayag
+		submission is not the same 
+		*/
+
 var gl;
 
 var appInput = new Input();
